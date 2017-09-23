@@ -14,7 +14,11 @@
         </Grid.RowDefinitions>
         <Menu >
             <MenuItem Header="認証">
-                <MenuItem Header="Twitter" />
+                <MenuItem Header="Twitter" Click="AuthTwitterMenuItem_Click"/>
+                <MenuItem Header="Pawoo" Click="AuthPawooMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="アカウント">
+                
             </MenuItem>
         </Menu>
         <Grid x:Name="tabsGrid" Grid.Row="1">
