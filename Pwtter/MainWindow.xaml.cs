@@ -34,6 +34,10 @@ namespace Pwtter
             Instance = this;
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
+            // Create Directory
+            if (!System.IO.Directory.Exists("./tokens"))
+                System.IO.Directory.CreateDirectory("./tokens");
+
             // Login
             if (System.IO.File.Exists(TokenFilePathTwitter)) AuthTwitterFromFile();
             if (System.IO.File.Exists(TokenFilePathPawoo)) AuthPawooFromFile();
@@ -103,16 +107,12 @@ namespace Pwtter
                     // Save Token
                     using (var sw = new System.IO.StreamWriter(TokenFilePathPawoo))
                     {
-                        sw.WriteLine(accessToken);
+                        sw.WriteLine(accessToken.AccessToken);
                     }
-
-                    // DEBUG
-                    var sp = new StackPanel();
-                    Grid.SetColumn(sp, 1);
-                    tabsGrid.Children.Add(sp);
+                    // タイムラインのロード
                     foreach (var s in await PawooClient.GetHomeTimeline())
                     {
-                        sp.Children.Add(new TextBlock { Text = s.Content + "\n---", TextWrapping = TextWrapping.Wrap });
+                        pawooTimelineStackPanel.Children.Add(new Toot(s));
                     }
                 }
             }
@@ -146,6 +146,23 @@ namespace Pwtter
                 ClientSecret = Properties.Resources.PwClientSecret
             };
             PawooClient = new Mastonet.MastodonClient(appRegistration, new Mastonet.Entities.Auth { AccessToken = accessToken });
+
+        }
+
+        /// <summary>
+        /// タイムラインを更新する
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void ReloadMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (PawooClient != null)
+            {
+                foreach (var s in await PawooClient.GetHomeTimeline())
+                {
+                    pawooTimelineStackPanel.Children.Add(new Toot(s));
+                }
+            }
 
         }
     }

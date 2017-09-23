@@ -84,6 +84,9 @@
     <Compile Include="AuthWindow.xaml.cs">
       <DependentUpon>AuthWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Toot.xaml.cs">
+      <DependentUpon>Toot.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TweetBox.xaml.cs">
       <DependentUpon>TweetBox.xaml</DependentUpon>
     </Compile>
@@ -103,6 +106,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Toot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TweetBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

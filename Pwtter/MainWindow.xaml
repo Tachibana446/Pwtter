@@ -18,14 +18,19 @@
                 <MenuItem Header="Pawoo" Click="AuthPawooMenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="アカウント">
-                
+
             </MenuItem>
+            <MenuItem Header="更新" Click="ReloadMenuItem_Click"/>
         </Menu>
         <Grid x:Name="tabsGrid" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
+
+            <ScrollViewer Grid.Column="1" >
+                <StackPanel x:Name="pawooTimelineStackPanel" />
+            </ScrollViewer>
         </Grid>
         <local:TweetBox Grid.Row="2"/>
     </Grid>
