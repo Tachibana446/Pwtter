@@ -61,6 +61,33 @@ namespace Pwtter.Properties {
         }
         
         /// <summary>
+        ///   Pwtter-v1 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PwAppName {
+            get {
+                return ResourceManager.GetString("PwAppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   5e81a06cf793c45ca6c393a97113bbb4a61abeebbe4a52743c62333fbadbfad0 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PwClientKey {
+            get {
+                return ResourceManager.GetString("PwClientKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   861368f6e9c5a42e31e8da00f378aaf4d3079e6be476e071ae3c9afe8548e1bb に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PwClientSecret {
+            get {
+                return ResourceManager.GetString("PwClientSecret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   ORW7Ow6miLWNPxoXfU0CIaoNN に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string TwConsumerKey {

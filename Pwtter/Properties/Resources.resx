@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="PwAppName" xml:space="preserve">
+    <value>Pwtter-v1</value>
+  </data>
+  <data name="PwClientKey" xml:space="preserve">
+    <value>5e81a06cf793c45ca6c393a97113bbb4a61abeebbe4a52743c62333fbadbfad0</value>
+  </data>
+  <data name="PwClientSecret" xml:space="preserve">
+    <value>861368f6e9c5a42e31e8da00f378aaf4d3079e6be476e071ae3c9afe8548e1bb</value>
+  </data>
   <data name="TwConsumerKey" xml:space="preserve">
     <value>ORW7Ow6miLWNPxoXfU0CIaoNN</value>
   </data>
