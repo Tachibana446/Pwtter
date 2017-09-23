@@ -25,12 +25,20 @@ namespace Pwtter
         public CoreTweet.Tokens TwitterTokens { get; set; } = null;
         public Mastonet.MastodonClient PawooClient { get; set; } = null;
 
+        const string TokenFilePathTwitter = "./tokens/twitter.txt";
+        const string TokenFilePathPawoo = "./tokens/pawoo.txt";
+
         public MainWindow()
         {
             InitializeComponent();
             Instance = this;
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
+            // Login
+            if (System.IO.File.Exists(TokenFilePathTwitter)) AuthTwitterFromFile();
+            if (System.IO.File.Exists(TokenFilePathPawoo)) AuthPawooFromFile();
         }
+
 
 
         /// <summary>
@@ -48,6 +56,12 @@ namespace Pwtter
                 if (authWindow.isOk)
                 {
                     TwitterTokens = CoreTweet.OAuth.GetTokens(session, authWindow.pin);
+                    // Save Token
+                    using (var sw = new System.IO.StreamWriter(TokenFilePathTwitter))
+                    {
+                        sw.WriteLine(TwitterTokens.AccessToken);
+                        sw.WriteLine(TwitterTokens.AccessTokenSecret);
+                    }
                     // DEBUG
                     var stackPanel = new StackPanel();
                     foreach (var s in TwitterTokens.Statuses.HomeTimeline())
@@ -86,13 +100,19 @@ namespace Pwtter
                 {
                     var accessToken = await authClient.ConnectWithCode(authWindow.pin);
                     PawooClient = new Mastonet.MastodonClient(appRegistration, accessToken);
+                    // Save Token
+                    using (var sw = new System.IO.StreamWriter(TokenFilePathPawoo))
+                    {
+                        sw.WriteLine(accessToken);
+                    }
+
                     // DEBUG
                     var sp = new StackPanel();
                     Grid.SetColumn(sp, 1);
                     tabsGrid.Children.Add(sp);
                     foreach (var s in await PawooClient.GetHomeTimeline())
                     {
-                        sp.Children.Add(new TextBlock { Text = s.Content + "\n---" , TextWrapping = TextWrapping.Wrap});
+                        sp.Children.Add(new TextBlock { Text = s.Content + "\n---", TextWrapping = TextWrapping.Wrap });
                     }
                 }
             }
@@ -100,6 +120,33 @@ namespace Pwtter
             {
                 MessageBox.Show(ex.Message, "エラー");
             }
+        }
+
+        private void AuthTwitterFromFile()
+        {
+            var lines = System.IO.File.ReadLines(TokenFilePathTwitter).ToList();
+            if (lines.Count() != 2) return;
+            TwitterTokens = CoreTweet.Tokens.Create(
+                Properties.Resources.TwConsumerKey,
+                Properties.Resources.TwConsumerSecret,
+                lines[0],
+                lines[1]
+            );
+
+        }
+
+        private void AuthPawooFromFile()
+        {
+            var accessToken = System.IO.File.ReadLines(TokenFilePathPawoo).ToArray()[0];
+
+            var appRegistration = new Mastonet.Entities.AppRegistration
+            {
+                Instance = "pawoo.net",
+                ClientId = Properties.Resources.PwClientKey,
+                ClientSecret = Properties.Resources.PwClientSecret
+            };
+            PawooClient = new Mastonet.MastodonClient(appRegistration, new Mastonet.Entities.Auth { AccessToken = accessToken });
+
         }
     }
 }
