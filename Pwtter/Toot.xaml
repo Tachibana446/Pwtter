@@ -20,14 +20,15 @@
                 <RowDefinition Height="24" />
             </Grid.RowDefinitions>
 
-            <TextBlock x:Name="nameTextBlock" Grid.Column="1" FontSize="18"></TextBlock>
+            <TextBlock x:Name="nameTextBlock" Grid.Column="1" FontSize="18" TextWrapping="Wrap"></TextBlock>
 
             <Image x:Name="iconImage" Grid.Row="1" Width="36" Height="36"/>
 
-            <TextBlock x:Name="mainContent" Grid.Row="1" Grid.Column="1" FontSize="14" TextWrapping="Wrap">
-            </TextBlock>
+            <TextBox x:Name="mainContent" Grid.Row="1" Grid.Column="1" FontSize="14" 
+                     TextWrapping="Wrap" IsReadOnly="True" BorderThickness="0">
+            </TextBox>
 
-            <TextBlock x:Name="dateTextBlock" Grid.Row="2" Grid.Column="1" FontSize="14" Foreground="Gray"></TextBlock>
+            <TextBlock x:Name="dateTextBlock" Grid.Row="2" Grid.Column="1" FontSize="14" Foreground="Gray" TextWrapping="Wrap"></TextBlock>
         </Grid>
     </Border>
 </UserControl>
