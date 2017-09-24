@@ -18,7 +18,11 @@
                 <MenuItem Header="Pawoo" Click="AuthPawooMenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="アカウント">
-
+                <MenuItem Header="Twitter:"/>
+                <MenuItem x:Name="twitterAccountMenuItem" Header="なし" />
+                <Separator />
+                <MenuItem Header="Pawoo:"/>
+                <MenuItem x:Name="pawooAccountMenuItem" Header="なし"/>
             </MenuItem>
             <MenuItem Header="更新" Click="ReloadMenuItem_Click"/>
         </Menu>
@@ -27,6 +31,10 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
+
+            <ScrollViewer>
+                <StackPanel x:Name="twitterTimelineStackPanel" />
+            </ScrollViewer>
 
             <ScrollViewer Grid.Column="1" >
                 <StackPanel x:Name="pawooTimelineStackPanel" />

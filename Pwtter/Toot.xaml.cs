@@ -44,7 +44,7 @@ namespace Pwtter
             mainContent.Text = ParseContent(toot.Content);
 
             // date 
-            dateTextBlock.Text = toot.CreatedAt.ToString();
+            dateTextBlock.Text = toot.CreatedAt.AddHours(9).ToString();
         }
 
         private static string ParseContent(string content)

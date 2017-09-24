@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,6 +42,7 @@ namespace Pwtter
             // Login
             if (System.IO.File.Exists(TokenFilePathTwitter)) AuthTwitterFromFile();
             if (System.IO.File.Exists(TokenFilePathPawoo)) AuthPawooFromFile();
+            Task.Run(async () => await SetMyAccounts());
         }
 
 
@@ -50,7 +52,7 @@ namespace Pwtter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AuthTwitterMenuItem_Click(object sender, RoutedEventArgs e)
+        private async void AuthTwitterMenuItem_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -66,13 +68,11 @@ namespace Pwtter
                         sw.WriteLine(TwitterTokens.AccessToken);
                         sw.WriteLine(TwitterTokens.AccessTokenSecret);
                     }
-                    // DEBUG
-                    var stackPanel = new StackPanel();
-                    foreach (var s in TwitterTokens.Statuses.HomeTimeline())
+                    // タイムラインのロード
+                    foreach (var s in await TwitterTokens.Statuses.HomeTimelineAsync())
                     {
-                        stackPanel.Children.Add(new TextBlock() { Text = s.Text });
+                        twitterTimelineStackPanel.Children.Add(new Tweet(s));
                     }
-                    tabsGrid.Children.Add(stackPanel);
                 }
             }
             catch (CoreTweet.TwitterException ex)
@@ -80,6 +80,7 @@ namespace Pwtter
                 MessageBox.Show(ex.Message, "エラー");
                 return;
             }
+            await SetMyAccounts();
         }
 
         /// <summary>
@@ -119,6 +120,45 @@ namespace Pwtter
             catch (Mastonet.ServerErrorException ex)
             {
                 MessageBox.Show(ex.Message, "エラー");
+                return;
+            }
+            await SetMyAccounts();
+        }
+
+        /// <summary>
+        /// 自分のアカウントを取得し、メニューバーに表示
+        /// </summary>
+        /// <returns></returns>
+        private async Task SetMyAccounts()
+        {
+            try
+            {
+                if (TwitterTokens != null)
+                {
+                    var tweet = (await TwitterTokens.Statuses.UserTimelineAsync())[0];
+                    var text = $"{tweet.User.Name}(@{tweet.User.ScreenName})".Replace("_", "__"); // アンダーバーをエスケープ
+                    Dispatcher.Invoke(() => twitterAccountMenuItem.Header = text);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Twitterのアカウントを読み込む際にエラーがでました。\n再認証してください。\n" + e.Message);
+                TwitterTokens = null;
+            }
+
+            try
+            {
+                if (PawooClient != null)
+                {
+                    var user = await PawooClient.GetCurrentUser();
+                    var text = $"{user.DisplayName}(@{user.AccountName})".Replace("_", "__"); // アンダーバーをエスケープ
+                    Dispatcher.Invoke(() => pawooAccountMenuItem.Header = text);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Pawooのアカウントを読み込む際にエラーが出ました。\n再認証してください。\n" + e.Message);
+                PawooClient = null;
             }
         }
 
@@ -164,6 +204,13 @@ namespace Pwtter
                 }
             }
 
+            if (TwitterTokens != null)
+            {
+                foreach (var s in await TwitterTokens.Statuses.HomeTimelineAsync())
+                {
+                    twitterTimelineStackPanel.Children.Add(new Tweet(s));
+                }
+            }
         }
     }
 }
