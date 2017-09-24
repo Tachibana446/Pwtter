@@ -38,7 +38,7 @@ namespace Pwtter
 
             iconImage.Source = bitmapImage;
             // Name
-            nameTextBlock.Text = toot.Account.DisplayName;
+            nameTextBlock.Text = $"{toot.Account.DisplayName} (@{toot.Account.AccountName})";
 
             // Content
             mainContent.Text = ParseContent(toot.Content);
